@@ -92,6 +92,9 @@ const Scan = () => {
               <Webcam
                 ref={webcamRef}
                 className="rounded-lg shadow-lg w-80 h-80"
+                videoConstraints={{
+                  facingMode: "environment", // Tries to use rear camera
+                }}
               />
               <canvas ref={canvasRef} className="hidden"></canvas>
             </>
