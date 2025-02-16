@@ -26,7 +26,7 @@ const Scan = () => {
   const requestCameraPermission = async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: { exact: "environment" } }, // Rear camera
+        video: { facingMode: "environment" }, // Rear camera
       });
       setHasPermission(true);
       setPermissionMessage("");
