@@ -1,0 +1,9 @@
+.optionsField{
+    border: 1px solid oklch(0.929 0.013 255.508);
+    width: 100%;
+    padding: 8px;
+    font-size: 10px;
+    margin-bottom: 8px;
+    border-radius: 4px;
+    outline: none;
+}
