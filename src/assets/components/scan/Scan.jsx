@@ -61,12 +61,6 @@ const Scan = () => {
     }
   };
 
-  const toggleCamera = () => {
-    setFacingMode((prevMode) =>
-      prevMode === "environment" ? "user" : "environment"
-    );
-  };
-
   return (
     <div className="flex flex-col items-center justify-center h-screen bg-gradient-to-r from-indigo-500 to-purple-500 text-white">
       {!scannedUrl && <h2 className="text-xl font-bold mb-4">Scan a QR Code</h2>}
@@ -94,16 +88,10 @@ const Scan = () => {
                 ref={webcamRef}
                 className="rounded-lg shadow-lg w-80 h-80"
                 videoConstraints={{
-                  facingMode: facingMode, // Toggle between front and rear
+                  facingMode: 'environment',
                 }}
               />
               <canvas ref={canvasRef} className="hidden"></canvas>
-              <button
-                onClick={toggleCamera}
-                className="mt-4 px-4 py-2 bg-blue-600 text-white font-bold rounded"
-              >
-                Switch Camera
-              </button>
             </>
           )}
           {scannedUrl && (
