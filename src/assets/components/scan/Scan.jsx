@@ -8,6 +8,7 @@ const Scan = () => {
   const [scannedUrl, setScannedUrl] = useState("");
   const [hasPermission, setHasPermission] = useState(null);
   const [permissionMessage, setPermissionMessage] = useState("");
+  const [facingMode, setFacingMode] = useState("environment"); // Default to rear camera
 
   useEffect(() => {
     requestCameraPermission();
@@ -25,9 +26,7 @@ const Scan = () => {
 
   const requestCameraPermission = async () => {
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: "environment" }, // Rear camera
-      });
+      const stream = await navigator.mediaDevices.getUserMedia({ video: true });
       setHasPermission(true);
       setPermissionMessage("");
       stream.getTracks().forEach((track) => track.stop()); // Stop the stream after checking
@@ -35,7 +34,7 @@ const Scan = () => {
       console.error("Camera access denied:", error);
       setHasPermission(false);
       setPermissionMessage(
-        "Camera access is blocked or rear camera is not available. Please allow camera access from browser settings."
+        "Camera access is blocked. Please allow camera access from browser settings."
       );
     }
   };
@@ -62,14 +61,16 @@ const Scan = () => {
     }
   };
 
+  const toggleCamera = () => {
+    setFacingMode((prevMode) =>
+      prevMode === "environment" ? "user" : "environment"
+    );
+  };
+
   return (
     <div className="flex flex-col items-center justify-center h-screen bg-gradient-to-r from-indigo-500 to-purple-500 text-white">
-      {!scannedUrl && (
-        <h2 className="text-xl font-bold mb-4">Scan a QR Code</h2>
-      )}
-      {scannedUrl && (
-        <h2 className="text-xl font-bold">Scanned Successfully ✅</h2>
-      )}
+      {!scannedUrl && <h2 className="text-xl font-bold mb-4">Scan a QR Code</h2>}
+      {scannedUrl && <h2 className="text-xl font-bold">Scanned Successfully ✅</h2>}
 
       {hasPermission === null && <p>Requesting camera permissions...</p>}
 
@@ -93,10 +94,16 @@ const Scan = () => {
                 ref={webcamRef}
                 className="rounded-lg shadow-lg w-80 h-80"
                 videoConstraints={{
-                  facingMode: "environment", // Tries to use rear camera
+                  facingMode: facingMode, // Toggle between front and rear
                 }}
               />
               <canvas ref={canvasRef} className="hidden"></canvas>
+              <button
+                onClick={toggleCamera}
+                className="mt-4 px-4 py-2 bg-blue-600 text-white font-bold rounded"
+              >
+                Switch Camera
+              </button>
             </>
           )}
           {scannedUrl && (
