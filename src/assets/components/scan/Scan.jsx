@@ -25,7 +25,9 @@ const Scan = () => {
 
   const requestCameraPermission = async () => {
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: { facingMode: { exact: "environment" } }, // Rear camera
+      });
       setHasPermission(true);
       setPermissionMessage("");
       stream.getTracks().forEach((track) => track.stop()); // Stop the stream after checking
@@ -33,7 +35,7 @@ const Scan = () => {
       console.error("Camera access denied:", error);
       setHasPermission(false);
       setPermissionMessage(
-        "Camera access is blocked. Please allow camera access from browser settings."
+        "Camera access is blocked or rear camera is not available. Please allow camera access from browser settings."
       );
     }
   };
@@ -62,8 +64,12 @@ const Scan = () => {
 
   return (
     <div className="flex flex-col items-center justify-center h-screen bg-gradient-to-r from-indigo-500 to-purple-500 text-white">
-      {!scannedUrl && <h2 className="text-xl font-bold mb-4">Scan a QR Code</h2>}
-      {scannedUrl && <h2 className="text-xl font-bold">Scanned Successfully ✅</h2>}
+      {!scannedUrl && (
+        <h2 className="text-xl font-bold mb-4">Scan a QR Code</h2>
+      )}
+      {scannedUrl && (
+        <h2 className="text-xl font-bold">Scanned Successfully ✅</h2>
+      )}
 
       {hasPermission === null && <p>Requesting camera permissions...</p>}
 
@@ -91,7 +97,9 @@ const Scan = () => {
             </>
           )}
           {scannedUrl && (
-            <p className="mt-4 text-lg text-center">Redirecting to: <br/> {scannedUrl}...</p>
+            <p className="mt-4 text-lg text-center">
+              Redirecting to: <br /> {scannedUrl}...
+            </p>
           )}
         </>
       )}
